@@ -3,6 +3,7 @@ import cv2
 import RPi.GPIO as GPIO
 import time
 ################################################################
+#path = '/home/nico/opencv/haarcascade/cascade.xml'  # PATH OF THE CASCADE
 path = '/home/nico/opencv/haarcascade/haarcascade_eye.xml'  # PATH OF THE CASCADE
 cameraNo = 0  # CAMERA NUMBER
 objectName = 'EYE'  # OBJECT NAME TO DISPLAY
@@ -11,7 +12,9 @@ frameHeight = 480  # DISPLAY HEIGHT
 color = (255, 0, 255)
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
-GPIO.setup(2,GPIO.OUT)
+GPIO.setup(14,GPIO.OUT)
+GPIO.setup(15,GPIO.OUT)
+GPIO.setup(18,GPIO.OUT)
 #################################################################
 cap = cv2.VideoCapture(cameraNo)
 cap.set(3, frameWidth)
@@ -59,10 +62,17 @@ cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, color, 2)
     cv2.putText(img,str(int(objcount)),(200,80),cv2.FONT_HERSHEY_SIMPLEX,1,(50, 205, 50),2)
     #LED STATUS
     if objcount > 0:
-        GPIO.output(2,GPIO.HIGH)
+        GPIO.output(14,GPIO.HIGH)
 
     else:
-        GPIO.output(2,GPIO.LOW)
+        GPIO.output(14,GPIO.LOW)
+
+    if objcount == 0:
+
+        GPIO.output(15,GPIO.HIGH)
+
+    else:
+        GPIO.output(15,GPIO.LOW)
 
     cv2.imshow("Result", img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
